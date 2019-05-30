@@ -12,16 +12,19 @@ term
     ;
 
 factor
-    : (PLUS | MINUS) xfactor
+    : signed_factor
     | xfactor
     ;
 
+signed_factor : (PLUS | MINUS) xfactor ;
+
 xfactor
-    : '(' expression ')'
-    | value '^' factor
+    : paren_expr
     | function_call
     | value
     ;
+
+paren_expr : '(' expression ')' ;
 
 function_call
     : function_name '(' expression (',' expression)* ')'
