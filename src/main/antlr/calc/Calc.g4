@@ -27,7 +27,7 @@ xfactor
 paren_expr : '(' expression ')' ;
 
 function_call
-    : function_name '(' expression (',' expression)* ')'
+    : function_name OPEN_PAREN (expression (COMMA expression)*)? CLOSE_PAREN
     ;
 
 function_name
@@ -36,17 +36,24 @@ function_name
 
 value
     : variable
-    | NUMBER
+    | number
     ;
 
 variable
     : ID
     ;
 
+number
+    : NUMBER
+    ;
+
 PLUS: '+';
 MINUS: '-';
 TIMES: '*';
 DIV: '/';
+OPEN_PAREN: '(';
+CLOSE_PAREN: ')';
+COMMA: ',';
 ID: LETTER (LETTER|DIGIT)*;
 LETTER: ('a'..'z')|('A'..'Z')|'_';
 NUMBER: DIGIT+ ('.' DIGIT+)?;

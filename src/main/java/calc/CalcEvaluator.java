@@ -3,7 +3,19 @@ package calc;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static java.lang.Math.sin;
+
 public class CalcEvaluator extends CalcBaseVisitor<Double> {
+    private Map<String, Double> variables = new HashMap<>();
+
+    public void set(String name, double value) {
+        variables.put(name, value);
+    }
+
     @Override
     public Double visitExpression(CalcParser.ExpressionContext ctx) {
         double accumulator = ctx.getChild(0).accept(this);
@@ -40,11 +52,6 @@ public class CalcEvaluator extends CalcBaseVisitor<Double> {
     }
 
     @Override
-    public Double visitFactor(CalcParser.FactorContext ctx) {
-        return super.visitFactor(ctx);
-    }
-
-    @Override
     public Double visitSigned_factor(CalcParser.Signed_factorContext ctx) {
         int op = ((TerminalNode) ctx.getChild(0)).getSymbol().getType();
         Double value = ctx.getChild(1).accept(this);
@@ -55,32 +62,43 @@ public class CalcEvaluator extends CalcBaseVisitor<Double> {
     }
 
     @Override
-    public Double visitXfactor(CalcParser.XfactorContext ctx) {
-        return super.visitXfactor(ctx);
-    }
-
-    @Override
     public Double visitParen_expr(CalcParser.Paren_exprContext ctx) {
         return ctx.getChild(1).accept(this);
     }
 
     @Override
     public Double visitFunction_call(CalcParser.Function_callContext ctx) {
-        return super.visitFunction_call(ctx);
+        String name = ctx.function_name().getText();
+        List<CalcParser.ExpressionContext> arguments = ctx.expression();
+
+        boolean functionNameKnown = false;
+        int expectedArguments = -1;
+
+        if(name.equals("sin")) {
+            functionNameKnown = true;
+            if(arguments.size() == 1) {
+                double a0 = arguments.get(0).accept(this);
+                return sin(a0);
+            } else {
+                expectedArguments = 1;
+            }
+        }
+        if(!functionNameKnown) {
+            throw new RuntimeException(String.format("Unknown function: %s", name));
+        }
+        if(arguments.size() < expectedArguments) {
+            throw new RuntimeException(String.format("Not enough arguments for %s", name));
+        }
+        throw new RuntimeException(String.format("Too many arguments for %s", name));
     }
 
     @Override
-    public Double visitFunction_name(CalcParser.Function_nameContext ctx) {
-        return super.visitFunction_name(ctx);
-    }
-
-    @Override
-    public Double visitValue(CalcParser.ValueContext ctx) {
+    public Double visitNumber(CalcParser.NumberContext ctx) {
         return Double.parseDouble(ctx.getText());
     }
 
     @Override
     public Double visitVariable(CalcParser.VariableContext ctx) {
-        return super.visitVariable(ctx);
+        return variables.get(ctx.getText());
     }
 }
