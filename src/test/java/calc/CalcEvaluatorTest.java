@@ -1,12 +1,10 @@
 package calc;
 
-import org.antlr.v4.runtime.CharStreams;
-import org.antlr.v4.runtime.CodePointCharStream;
-import org.antlr.v4.runtime.CommonTokenStream;
-import org.junit.Assert;
 import org.junit.Test;
 
-public class CalcEvaluatorTest {
+import static org.junit.Assert.*;
+
+public class CalcEvaluatorTest extends CalcTestBase {
     @Test
     public void testSimpleExpressions() {
         assertResult("2+4", 6);
@@ -38,10 +36,10 @@ public class CalcEvaluatorTest {
 
 
     private void assertResult(String input, CalcEvaluator calcEvaluator, double expected) {
-        Assert.assertEquals(expected, getResult(input, calcEvaluator), 1e-6);
+        assertEquals(expected, getResult(input, calcEvaluator), 1e-6);
     }
     private void assertResult(String input, double expected) {
-        Assert.assertEquals(expected, getResult(input), 1e-6);
+        assertEquals(expected, getResult(input), 1e-6);
     }
 
     private double getResult(String input) {
@@ -53,12 +51,5 @@ public class CalcEvaluatorTest {
         CalcParser calcParser = getCalcParser(input);
         CalcParser.ExpressionContext expression = calcParser.expression();
         return expression.accept(calcEvaluator);
-    }
-
-    private CalcParser getCalcParser(String input) {
-        CodePointCharStream stream = CharStreams.fromString(input);
-        CalcLexer calcLexer = new CalcLexer(stream);
-        CommonTokenStream tokenStream = new CommonTokenStream(calcLexer);
-        return new CalcParser(tokenStream);
     }
 }
