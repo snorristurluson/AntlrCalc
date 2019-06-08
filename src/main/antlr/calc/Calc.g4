@@ -33,4 +33,8 @@ ID: LETTER (LETTER|DIGIT)*;
 LETTER: ('a'..'z')|('A'..'Z')|'_';
 NUMBER: DIGIT+ ('.' DIGIT+)?;
 DIGIT: ('0'..'9');
-WS: [ \r\n\t]+ -> skip;
+
+WS: [ \r\n\t]+ -> channel(HIDDEN);
+ERRCHAR
+	:	.	-> channel(HIDDEN)
+	;

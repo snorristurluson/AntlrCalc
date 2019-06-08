@@ -1,0 +1,29 @@
+<idea-plugin>
+    <id>antlrcalc</id>
+    <name>Calc</name>
+    <version>1.0</version>
+    <vendor>Snorri Sturluson</vendor>
+
+    <description>Test of an Antlr based Intellij custom language plugin</description>
+
+    <change-notes>There are no change notes yet, but they will show up here</change-notes>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/build_number_ranges.html for description -->
+    <idea-version since-build="173.0"/>
+
+    <!-- please see http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/plugin_compatibility.html
+         on how to target different products -->
+    <!-- uncomment to enable plugin in all products
+    <depends>com.intellij.modules.lang</depends>
+    -->
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileTypeFactory implementation="calcplugin.CalcFileTypeFactory"/>
+        <lang.parserDefinition language="Calc" implementationClass="calcplugin.CalcParserDefinition"/>
+    </extensions>
+
+    <actions>
+        <!-- Add your actions here -->
+    </actions>
+
+</idea-plugin>
