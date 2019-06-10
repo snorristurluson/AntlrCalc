@@ -34,6 +34,11 @@ LETTER: ('a'..'z')|('A'..'Z')|'_';
 NUMBER: DIGIT+ ('.' DIGIT+)?;
 DIGIT: ('0'..'9');
 
+LINE_COMMENT : '//' .*? ('\n'|EOF)	-> channel(HIDDEN) ;
+COMMENT      : '/*' .*? '*/'    	-> channel(HIDDEN) ;
+STRING :  '"' (ESC | ~["\\])* '"' ;
+fragment ESC :   '\\' ["\bfnrt] ;
+
 WS: [ \r\n\t]+ -> channel(HIDDEN);
 ERRCHAR
 	:	.	-> channel(HIDDEN)

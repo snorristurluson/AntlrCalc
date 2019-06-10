@@ -2,6 +2,7 @@ package calcplugin;
 
 import calc.CalcLexer;
 import calc.CalcParser;
+import calcplugin.psi.CalcPSIFileRoot;
 import com.intellij.lang.ASTNode;
 import com.intellij.lang.ParserDefinition;
 import com.intellij.lang.PsiParser;
@@ -15,23 +16,45 @@ import com.intellij.psi.tree.IFileElementType;
 import com.intellij.psi.tree.TokenSet;
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor;
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory;
+import org.antlr.intellij.adaptor.lexer.TokenIElementType;
 import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor;
+import org.antlr.intellij.adaptor.psi.ANTLRPsiNode;
 import org.antlr.v4.runtime.Parser;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.List;
 
 public class CalcParserDefinition implements ParserDefinition {
     public static final IFileElementType FILE =
             new IFileElementType(CalcLanguage.INSTANCE);
 
+    public static TokenIElementType ID;
+
+    static {
+        PSIElementTypeFactory.defineLanguageIElementTypes(CalcLanguage.INSTANCE,
+                CalcParser.tokenNames,
+                CalcParser.ruleNames);
+        List<TokenIElementType> tokenIElementTypes =
+                PSIElementTypeFactory.getTokenIElementTypes(CalcLanguage.INSTANCE);
+        ID = tokenIElementTypes.get(CalcLexer.ID);
+    }
+
     public static final TokenSet COMMENTS =
             PSIElementTypeFactory.createTokenSet(
-                    CalcLanguage.INSTANCE);
+                    CalcLanguage.INSTANCE,
+                    CalcLexer.LINE_COMMENT,
+                    CalcLexer.COMMENT);
 
     public static final TokenSet WHITESPACE =
             PSIElementTypeFactory.createTokenSet(
                     CalcLanguage.INSTANCE,
                     CalcLexer.WS);
+
+    public static final TokenSet STRING =
+            PSIElementTypeFactory.createTokenSet(
+                    CalcLanguage.INSTANCE,
+                    CalcLexer.STRING);
 
     @NotNull
     @Override
@@ -71,17 +94,17 @@ public class CalcParserDefinition implements ParserDefinition {
     @NotNull
     @Override
     public TokenSet getStringLiteralElements() {
-        return null;
+        return STRING;
     }
 
     @NotNull
     @Override
     public PsiElement createElement(ASTNode node) {
-        return null;
+        return new ANTLRPsiNode(node);
     }
 
     @Override
     public PsiFile createFile(FileViewProvider viewProvider) {
-        return null;
+        return new CalcPSIFileRoot(viewProvider);
     }
 }
