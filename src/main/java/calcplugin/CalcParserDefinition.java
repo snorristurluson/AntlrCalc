@@ -42,9 +42,7 @@ public class CalcParserDefinition implements ParserDefinition {
 
     public static final TokenSet COMMENTS =
             PSIElementTypeFactory.createTokenSet(
-                    CalcLanguage.INSTANCE,
-                    CalcLexer.LINE_COMMENT,
-                    CalcLexer.COMMENT);
+                    CalcLanguage.INSTANCE);
 
     public static final TokenSet WHITESPACE =
             PSIElementTypeFactory.createTokenSet(
@@ -54,7 +52,8 @@ public class CalcParserDefinition implements ParserDefinition {
     public static final TokenSet STRING =
             PSIElementTypeFactory.createTokenSet(
                     CalcLanguage.INSTANCE,
-                    CalcLexer.STRING);
+                    CalcLexer.SingleQuoteString,
+                    CalcLexer.DoubleQuoteString);
 
     @NotNull
     @Override

@@ -21,6 +21,20 @@ public class CalcEvaluatorTest extends CalcTestBase {
     }
 
     @Test
+    public void testStringExpressions() {
+        assertResult("'a'", "a");
+        assertResult("\"a\"", "a");
+        assertResult("'a' + 'b'", "ab");
+        assertResult("'a' + 'b' + 'c' + 'd'", "abcd");
+        assertResult("('a' + 'b') + 'c' + 'd'", "abcd");
+    }
+
+    @Test
+    public void testIfStatement() {
+        assertResult("if(1>0, 'true', 'false')", "true");
+    }
+
+    @Test
     public void testFunctionCalls() {
         assertResult("sin(0.5)", 0.479425539);
     }
@@ -34,22 +48,40 @@ public class CalcEvaluatorTest extends CalcTestBase {
         assertResult("sin(x)", calcEvaluator, 0.0015926529164868282);
     }
 
+    @Test
+    public void testStringVariableInExpression() {
+        CalcEvaluator calcEvaluator = new CalcEvaluator();
+        calcEvaluator.set("a", "bingo");
+        calcEvaluator.set("b", "bongo");
+        assertResult("a+b", calcEvaluator, "bingobongo");
+        assertResult("'this is a ' + a + ' and a ' + b", calcEvaluator, "this is a bingo and a bongo");
+    }
+
 
     private void assertResult(String input, CalcEvaluator calcEvaluator, double expected) {
-        assertEquals(expected, getResult(input, calcEvaluator), 1e-6);
-    }
-    private void assertResult(String input, double expected) {
-        assertEquals(expected, getResult(input), 1e-6);
+        assertEquals(expected, getResult(input, calcEvaluator).doubleValue, 1e-6);
     }
 
-    private double getResult(String input) {
+    private void assertResult(String input, CalcEvaluator calcEvaluator, String expected) {
+        assertEquals(expected, getResult(input, calcEvaluator).stringValue);
+    }
+
+    private void assertResult(String input, double expected) {
+        assertEquals(expected, getResult(input).doubleValue, 1e-6);
+    }
+
+    private void assertResult(String input, String expected) {
+        assertEquals(expected, getResult(input).stringValue);
+    }
+
+    private TypedValue getResult(String input) {
         CalcEvaluator calcEvaluator = new CalcEvaluator();
         return getResult(input, calcEvaluator);
     }
 
-    private double getResult(String input, CalcEvaluator calcEvaluator) {
+    private TypedValue getResult(String input, CalcEvaluator calcEvaluator) {
         CalcParser calcParser = getCalcParser(input);
-        CalcParser.ExpressionContext expression = calcParser.expression();
+        CalcParser.InputContext expression = calcParser.input();
         return expression.accept(calcEvaluator);
     }
 }

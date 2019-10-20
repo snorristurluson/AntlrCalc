@@ -43,7 +43,7 @@ public class CalcBenchmark {
         for (int i = 0; i < NUM_VALUES; i++) {
             calcEvaluator.set("x", xValues[i]);
             calcEvaluator.set("y", yValues[i]);
-            double result = expression.accept(calcEvaluator);
+            double result = expression.accept(calcEvaluator).doubleValue;
             if(abs(expectedResults[i]-result) > 1e-6) {
                 throw new RuntimeException("Bad result");
             }
@@ -55,12 +55,14 @@ public class CalcBenchmark {
     private static long timeCalcLambdaGenerator(CalcParser.ExpressionContext expression, double[] xValues, double[] yValues, double[] expectedResults) {
         long startTime = System.currentTimeMillis();
         CalcLambdaGenerator lambdaGenerator = new CalcLambdaGenerator();
-        CalcLambda calcLambda = expression.accept(lambdaGenerator);
+        lambdaGenerator.declare("x", TypedValue.Type.DOUBLE);
+        lambdaGenerator.declare("y", TypedValue.Type.DOUBLE);
+        TypedCalcLambda calcLambda = expression.accept(lambdaGenerator);
         ValueStore vs = new ValueStore();
         for (int i = 0; i < NUM_VALUES; i++) {
             vs.set("x", xValues[i]);
             vs.set("y", yValues[i]);
-            double result = calcLambda.evaluate(vs);
+            double result = calcLambda.dFun.evaluate(vs);
             if(abs(expectedResults[i]-result) > 1e-6) {
                 throw new RuntimeException("Bad result");
             }

@@ -1,5 +1,5 @@
 package calc;
 
-public interface CalcLambda {
+public interface CalcLambdaDouble {
     double evaluate(ValueStore values);
 }

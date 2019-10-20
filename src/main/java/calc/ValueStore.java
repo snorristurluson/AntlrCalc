@@ -4,13 +4,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 class ValueStore {
-    private Map<String, Double> values = new HashMap<>();
+    private Map<String, TypedValue> values = new HashMap<>();
 
     void set(String name, double value) {
-        values.put(name, value);
+        values.put(name, new TypedValue(value));
     }
 
-    double get(String name) {
+    void set(String name, String value) {
+        values.put(name, new TypedValue(value));
+    }
+
+    TypedValue get(String name) {
         return values.get(name);
     }
 }

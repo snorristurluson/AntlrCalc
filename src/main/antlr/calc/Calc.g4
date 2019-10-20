@@ -3,6 +3,8 @@ grammar Calc;
 package calc;
 }
 
+input : expression EOF ;
+
 expression : term ((PLUS | MINUS) term)* ;
 
 term : factor ((TIMES | DIV) factor)* ;
@@ -11,35 +13,104 @@ factor : signed_factor | xfactor ;
 
 signed_factor : (PLUS | MINUS) xfactor ;
 
-xfactor : paren_expr | function_call | value ;
+xfactor : paren_expr | function_expr | value ;
 
 paren_expr : '(' expression ')' ;
 
-function_call : function_name '(' (expression (',' expression)*)? ')' ;
+function_expr :
+	if_expr
+	| function_call
+	;
+
+function_call :
+	function_name '(' (expression (',' expression)*)? ')'
+	;
+
+if_expr :
+	IF '(' rel_expr ',' expression ',' expression ')'
+	;
+
+rel_expr : rel_term (OR rel_term)* ;
+
+rel_term : predicate (AND predicate)*;
+
+predicate : expression (EQ | NE | GT | GE | LT | LE) expression ;
 
 function_name : ID ;
 
-value : variable | number ;
+value : variable | number | string_literal;
 
 variable : ID ;
 
 number : NUMBER ;
 
+string_literal : SingleQuoteString | DoubleQuoteString ;
+
+SingleQuoteString
+    :
+    '\'' (ESC_S|.)*? '\''
+    ;
+
+DoubleQuoteString
+    :
+    '"' (ESC_D|.)*? '"'
+    ;
+
 PLUS: '+';
 MINUS: '-';
 TIMES: '*';
 DIV: '/';
+EQ: '=' | '==';
+NE: '!=' | '<>';
+GT: '>';
+GE: '>=';
+LT: '<';
+LE: '<=';
+
+IF: I F ;
+OR: O R ;
+AND: A N D ;
+
+
 ID: LETTER (LETTER|DIGIT)*;
 LETTER: ('a'..'z')|('A'..'Z')|'_';
 NUMBER: DIGIT+ ('.' DIGIT+)?;
 DIGIT: ('0'..'9');
 
-LINE_COMMENT : '//' .*? ('\n'|EOF)	-> channel(HIDDEN) ;
-COMMENT      : '/*' .*? '*/'    	-> channel(HIDDEN) ;
-STRING :  '"' (ESC | ~["\\])* '"' ;
-fragment ESC :   '\\' ["\bfnrt] ;
+fragment
+ESC_D: '\\"' | '\\\\' ;
+
+fragment
+ESC_S: '\\\'' | '\\\\' ;
 
 WS: [ \r\n\t]+ -> channel(HIDDEN);
 ERRCHAR
-	:	.	-> channel(HIDDEN)
+	:	.
 	;
+
+fragment A : [aA]; // match either an 'a' or 'A'
+fragment B : [bB];
+fragment C : [cC];
+fragment D : [dD];
+fragment E : [eE];
+fragment F : [fF];
+fragment G : [gG];
+fragment H : [hH];
+fragment I : [iI];
+fragment J : [jJ];
+fragment K : [kK];
+fragment L : [lL];
+fragment M : [mM];
+fragment N : [nN];
+fragment O : [oO];
+fragment P : [pP];
+fragment Q : [qQ];
+fragment R : [rR];
+fragment S : [sS];
+fragment T : [tT];
+fragment U : [uU];
+fragment V : [vV];
+fragment W : [wW];
+fragment X : [xX];
+fragment Y : [yY];
+fragment Z : [zZ];
