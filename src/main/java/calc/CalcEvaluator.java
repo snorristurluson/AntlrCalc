@@ -3,9 +3,7 @@ package calc;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import static java.lang.Math.sin;
 
@@ -64,7 +62,7 @@ public class CalcEvaluator extends CalcBaseVisitor<TypedValue> {
     @Override
     public TypedValue visitSigned_factor(CalcParser.Signed_factorContext ctx) {
         int op = ((TerminalNode) ctx.getChild(0)).getSymbol().getType();
-        Double value = ctx.getChild(1).accept(this).doubleValue;
+        double value = ctx.getChild(1).accept(this).doubleValue;
         if(op == CalcParser.MINUS) {
             value = -value;
         }

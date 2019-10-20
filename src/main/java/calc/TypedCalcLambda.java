@@ -39,7 +39,7 @@ public class TypedCalcLambda {
             CalcLambdaDouble prev = this.dFun;
             dFun = vs -> prev.evaluate(vs) - other.dFun.evaluate(vs);
         } else {
-            throw new RuntimeException("Incompatible types for add");
+            throw new RuntimeException("Incompatible types for subtract");
         }
     }
 
@@ -48,7 +48,7 @@ public class TypedCalcLambda {
             CalcLambdaDouble prev = this.dFun;
             dFun = vs -> prev.evaluate(vs) * other.dFun.evaluate(vs);
         } else {
-            throw new RuntimeException("Incompatible types for add");
+            throw new RuntimeException("Incompatible types for multiply");
         }
     }
 
@@ -57,7 +57,7 @@ public class TypedCalcLambda {
             CalcLambdaDouble prev = this.dFun;
             dFun = vs -> prev.evaluate(vs) / other.dFun.evaluate(vs);
         } else {
-            throw new RuntimeException("Incompatible types for add");
+            throw new RuntimeException("Incompatible types for divide");
         }
     }
 

@@ -7,7 +7,7 @@ public class TypedValue {
         BOOLEAN
     }
 
-    Type type;
+    private Type type;
     String stringValue;
     double doubleValue;
     boolean booleanValue;
