@@ -45,9 +45,9 @@ public class CalcLambdaGeneratorTest extends CalcTestBase {
 
         ValueStore valueStore = new ValueStore();
         valueStore.set("x", 4);
-        assertEquals(4, f.dFun.evaluate(valueStore), 1e-6);
+        assertEquals(4, f.evaluateDouble(valueStore), 1e-6);
         valueStore.set("x", 3.14);
-        assertEquals(3.14, f.dFun.evaluate(valueStore), 1e-6);
+        assertEquals(3.14, f.evaluateDouble(valueStore), 1e-6);
     }
 
     @Test
@@ -64,18 +64,18 @@ public class CalcLambdaGeneratorTest extends CalcTestBase {
         vs.set("x", 3);
         vs.set("y", 4);
         vs.set("z", 6);
-        assertEquals(1, f.dFun.evaluate(vs), 1e-6);
+        assertEquals(1, f.evaluateDouble(vs), 1e-6);
 
         vs.set("x", 5);
         vs.set("y", 2);
         vs.set("z", 3);
-        assertEquals(4, f.dFun.evaluate(vs), 1e-6);
+        assertEquals(4, f.evaluateDouble(vs), 1e-6);
     }
 
     @Test
     public void testFunctionCall() {
         TypedCalcLambda f = compileLambda("sin(0.5)");
-        assertEquals(0.479425539, f.dFun.evaluate(null), 1e-6);
+        assertEquals(0.479425539, f.evaluateDouble(null), 1e-6);
     }
 
     @Test
@@ -93,12 +93,12 @@ public class CalcLambdaGeneratorTest extends CalcTestBase {
 
     private void assertResult(String input, double expected) {
         TypedCalcLambda f = compileLambda(input);
-        assertEquals(expected, f.dFun.evaluate(null), 1e-6);
+        assertEquals(expected, f.evaluateDouble(null), 1e-6);
     }
 
     private void assertResult(String input, String expected) {
         TypedCalcLambda f = compileLambda(input);
-        assertEquals(expected, f.sFun.evaluate(null));
+        assertEquals(expected, f.evaluateString(null));
     }
 
 }

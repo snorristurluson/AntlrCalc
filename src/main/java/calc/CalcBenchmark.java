@@ -31,8 +31,8 @@ public class CalcBenchmark {
         CalcParser calcParser = getCalcParser(expressionSource);
         CalcParser.ExpressionContext expression = calcParser.expression();
 
-        long eval = timeCalcEvaluator(expression, xValues, yValues, expectedResults);
         long lambda = timeCalcLambdaGenerator(expression, xValues, yValues, expectedResults);
+        long eval = timeCalcEvaluator(expression, xValues, yValues, expectedResults);
         long java = timeJava(xValues, yValues, expectedResults);
         System.out.println(eval);
         System.out.println(lambda);

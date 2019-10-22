@@ -3,7 +3,9 @@ package calc;
 public class TypedValue {
     enum Type {
         DOUBLE,
+        DOUBLE_CONSTANT,
         STRING,
+        STRING_CONSTANT,
         BOOLEAN
     }
 

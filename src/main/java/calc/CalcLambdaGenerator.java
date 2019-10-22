@@ -81,7 +81,7 @@ public class CalcLambdaGenerator extends CalcBaseVisitor<TypedCalcLambda> {
             functionNameKnown = true;
             if(arguments.size() == 1) {
                 TypedCalcLambda a0 = arguments.get(0).accept(this);
-                return new TypedCalcLambda((ValueStore vs) -> sin(a0.dFun.evaluate(vs)));
+                return new TypedCalcLambda((ValueStore vs) -> sin(a0.evaluateDouble(vs)));
             } else {
                 expectedArguments = 1;
             }
@@ -149,22 +149,24 @@ public class CalcLambdaGenerator extends CalcBaseVisitor<TypedCalcLambda> {
                     }
                 });
             case DOUBLE:
+            case DOUBLE_CONSTANT:
                 return new TypedCalcLambda( (ValueStore vs) -> {
                     if (predicate.bFun.evaluate(vs)) {
-                        return thenExpr.dFun.evaluate(vs);
+                        return thenExpr.evaluateDouble(vs);
                     } else {
-                        return elseExpr.dFun.evaluate(vs);
+                        return elseExpr.evaluateDouble(vs);
                     }
                 });
 
             default:
-                throw new RuntimeException("Unsupporated type in if statement");
+                throw new RuntimeException("Unsupported type in if statement");
         }
     }
 
     @Override
     public TypedCalcLambda visitNumber(CalcParser.NumberContext ctx) {
-        return new TypedCalcLambda((ValueStore vs) -> Double.parseDouble(ctx.getText()));
+        double d = Double.parseDouble(ctx.getText());
+        return new TypedCalcLambda(d);
     }
 
     @Override
