@@ -26,10 +26,10 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 public class CalcParserDefinition implements ParserDefinition {
-    public static final IFileElementType FILE =
+    private static final IFileElementType FILE =
             new IFileElementType(CalcLanguage.INSTANCE);
 
-    public static TokenIElementType ID;
+    private static TokenIElementType IDENTIFIER;
 
     static {
         PSIElementTypeFactory.defineLanguageIElementTypes(CalcLanguage.INSTANCE,
@@ -37,19 +37,19 @@ public class CalcParserDefinition implements ParserDefinition {
                 CalcParser.ruleNames);
         List<TokenIElementType> tokenIElementTypes =
                 PSIElementTypeFactory.getTokenIElementTypes(CalcLanguage.INSTANCE);
-        ID = tokenIElementTypes.get(CalcLexer.ID);
+        IDENTIFIER = tokenIElementTypes.get(CalcLexer.IDENTIFIER);
     }
 
-    public static final TokenSet COMMENTS =
+    private static final TokenSet COMMENTS =
             PSIElementTypeFactory.createTokenSet(
                     CalcLanguage.INSTANCE);
 
-    public static final TokenSet WHITESPACE =
+    private static final TokenSet WHITESPACE =
             PSIElementTypeFactory.createTokenSet(
                     CalcLanguage.INSTANCE,
                     CalcLexer.WS);
 
-    public static final TokenSet STRING =
+    private static final TokenSet STRING =
             PSIElementTypeFactory.createTokenSet(
                     CalcLanguage.INSTANCE,
                     CalcLexer.SingleQuoteString,
@@ -68,7 +68,7 @@ public class CalcParserDefinition implements ParserDefinition {
         return new ANTLRParserAdaptor(CalcLanguage.INSTANCE, parser) {
             @Override
             protected ParseTree parse(Parser parser, IElementType root) {
-                return ((CalcParser) parser).expression();
+                return ((CalcParser) parser).input();
             }
         };
     }

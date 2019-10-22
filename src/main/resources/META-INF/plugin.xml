@@ -21,6 +21,8 @@
         <fileTypeFactory implementation="calcplugin.CalcFileTypeFactory"/>
         <lang.parserDefinition language="Calc" implementationClass="calcplugin.CalcParserDefinition"/>
         <lang.syntaxHighlighterFactory key="Calc" implementationClass="calcplugin.CalcSyntaxHighlighterFactory"/>
+        <lang.braceMatcher language="Calc" implementationClass="calcplugin.CalcBraceMatcher" />
+        <colorSettingsPage implementation="calcplugin.CalcColorSettingsPage"/>
     </extensions>
 
     <actions>

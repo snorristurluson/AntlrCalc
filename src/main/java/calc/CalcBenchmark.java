@@ -33,8 +33,10 @@ public class CalcBenchmark {
 
         long eval = timeCalcEvaluator(expression, xValues, yValues, expectedResults);
         long lambda = timeCalcLambdaGenerator(expression, xValues, yValues, expectedResults);
+        long java = timeJava(xValues, yValues, expectedResults);
         System.out.println(eval);
         System.out.println(lambda);
+        System.out.println(java);
     }
 
     private static long timeCalcEvaluator(CalcParser.ExpressionContext expression, double[] xValues, double[] yValues, double[] expectedResults) {
@@ -63,6 +65,20 @@ public class CalcBenchmark {
             vs.set("x", xValues[i]);
             vs.set("y", yValues[i]);
             double result = calcLambda.dFun.evaluate(vs);
+            if(abs(expectedResults[i]-result) > 1e-6) {
+                throw new RuntimeException("Bad result");
+            }
+        }
+        long endTime = System.currentTimeMillis();
+        return endTime - startTime;
+    }
+
+    private static long timeJava(double[] xValues, double[] yValues, double[] expectedResults) {
+        long startTime = System.currentTimeMillis();
+        for (int i = 0; i < NUM_VALUES; i++) {
+            double x = xValues[i];
+            double y = yValues[i];
+            double result = 123.456+x*sin(y+3.0/4+1.2)*0.25*3;
             if(abs(expectedResults[i]-result) > 1e-6) {
                 throw new RuntimeException("Bad result");
             }

@@ -15,12 +15,20 @@ import static com.intellij.openapi.editor.colors.TextAttributesKey.createTextAtt
 public class CalcSyntaxHighlighter implements SyntaxHighlighter {
     private static final TextAttributesKey[] EMPTY_KEYS = new TextAttributesKey[0];
 
-    public static final TextAttributesKey ID =
-            createTextAttributesKey("CALC_ID", DefaultLanguageHighlighterColors.IDENTIFIER);
-    public static final TextAttributesKey LINE_COMMENT =
-            createTextAttributesKey("SAMPLE_LINE_COMMENT", DefaultLanguageHighlighterColors.LINE_COMMENT);
-    public static final TextAttributesKey BLOCK_COMMENT =
-            createTextAttributesKey("SAMPLE_BLOCK_COMMENT", DefaultLanguageHighlighterColors.BLOCK_COMMENT);
+    static final TextAttributesKey IDENTIFIER =
+            createTextAttributesKey("CALC_IDENTIFIER", DefaultLanguageHighlighterColors.IDENTIFIER);
+
+    static final TextAttributesKey KEYWORD =
+            createTextAttributesKey("CALC_KEYWORD", DefaultLanguageHighlighterColors.KEYWORD);
+
+    private static final TextAttributesKey NUMBER =
+            createTextAttributesKey("CALC_NUMBER", DefaultLanguageHighlighterColors.CONSTANT);
+
+    static final TextAttributesKey STRING_LITERAL =
+            createTextAttributesKey("CALC_STRING_LITERAL", DefaultLanguageHighlighterColors.STRING);
+
+    static final TextAttributesKey PARENTHESES =
+            createTextAttributesKey("CALC_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES);
 
     @NotNull
     @Override
@@ -38,9 +46,28 @@ public class CalcSyntaxHighlighter implements SyntaxHighlighter {
         TextAttributesKey attrKey;
 
         switch (ttype) {
-            case CalcLexer.ID:
-                attrKey = ID;
+            case CalcLexer.IDENTIFIER:
+                attrKey = IDENTIFIER;
                 break;
+
+            case CalcLexer.IF:
+                attrKey = KEYWORD;
+                break;
+
+            case CalcLexer.NUMBER:
+                attrKey = NUMBER;
+                break;
+
+            case CalcLexer.SingleQuoteString:
+            case CalcLexer.DoubleQuoteString:
+                attrKey = STRING_LITERAL;
+                break;
+
+            case CalcLexer.OPEN_PAREN:
+            case CalcLexer.CLOSE_PAREN:
+                attrKey = PARENTHESES;
+                break;
+
             default:
                 return EMPTY_KEYS;
         }

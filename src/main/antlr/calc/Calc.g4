@@ -15,7 +15,7 @@ signed_factor : (PLUS | MINUS) xfactor ;
 
 xfactor : paren_expr | function_expr | value ;
 
-paren_expr : '(' expression ')' ;
+paren_expr : OPEN_PAREN expression CLOSE_PAREN ;
 
 function_expr :
 	if_expr
@@ -23,11 +23,11 @@ function_expr :
 	;
 
 function_call :
-	function_name '(' (expression (',' expression)*)? ')'
+	function_name OPEN_PAREN (expression (',' expression)*)? CLOSE_PAREN
 	;
 
 if_expr :
-	IF '(' rel_expr ',' expression ',' expression ')'
+	IF OPEN_PAREN rel_expr ',' expression ',' expression CLOSE_PAREN
 	;
 
 rel_expr : rel_term (OR rel_term)* ;
@@ -36,11 +36,11 @@ rel_term : predicate (AND predicate)*;
 
 predicate : expression (EQ | NE | GT | GE | LT | LE) expression ;
 
-function_name : ID ;
+function_name : IDENTIFIER ;
 
 value : variable | number | string_literal;
 
-variable : ID ;
+variable : IDENTIFIER ;
 
 number : NUMBER ;
 
@@ -56,6 +56,8 @@ DoubleQuoteString
     '"' (ESC_D|.)*? '"'
     ;
 
+OPEN_PAREN: '(';
+CLOSE_PAREN: ')';
 PLUS: '+';
 MINUS: '-';
 TIMES: '*';
@@ -72,7 +74,7 @@ OR: O R ;
 AND: A N D ;
 
 
-ID: LETTER (LETTER|DIGIT)*;
+IDENTIFIER: LETTER (LETTER|DIGIT)*;
 LETTER: ('a'..'z')|('A'..'Z')|'_';
 NUMBER: DIGIT+ ('.' DIGIT+)?;
 DIGIT: ('0'..'9');
@@ -85,7 +87,7 @@ ESC_S: '\\\'' | '\\\\' ;
 
 WS: [ \r\n\t]+ -> channel(HIDDEN);
 ERRCHAR
-	:	.
+	:	. -> channel(HIDDEN)
 	;
 
 fragment A : [aA]; // match either an 'a' or 'A'
